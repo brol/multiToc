@@ -106,7 +106,7 @@ class multiTocTpl
 		}
 		$res =
 			"\n<?php \n".
-			"echo '<style type=\"text/css\" media=\"screen\">@import url(".$css.");</style>';\n".
+			"echo '<style rel=\"stylesheet\" type=\"text/css\" media=\"screen\">@import url(".$css.");</style>';\n".
 			"?>\n";
 			
 		return $res;
@@ -462,4 +462,16 @@ class multiTocPublic
 		
 		return(staticRecord::newFromArray($array));
 	}
+}
+
+$core->addBehavior('publicBreadcrumb',array('extMultiToc','publicBreadcrumb'));
+
+class extMultiToc
+{
+    public static function publicBreadcrumb($context,$separator)
+    {
+        if ($context == 'multitoc') {
+            return __('Table of content');
+        }
+    }
 }

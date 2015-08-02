@@ -13,12 +13,12 @@ $this->registerModule(
 		/* Name */			"multiToc",
 		/* Description*/		"Makes posts or content's tables of content",
 		/* Author */			"Tomtom, Kozlika, Franck Paul, Pierre Van Glabeke",
-		/* Version */			'1.9.1',
+		/* Version */			'1.10',
 	/* Properties */
 	array(
 		'permissions' => 'usage,contentadmin',
 		'type' => 'plugin',
-		'dc_min' => '2.7',
+		'dc_min' => '2.8',
 		'support' => 'http://forum.dotclear.org/viewtopic.php?pid=332972#p332972',
 		'details' => 'http://plugins.dotaddict.org/dc2/details/multiToc'
 		)
