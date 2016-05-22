@@ -2,7 +2,7 @@
 # -- BEGIN LICENSE BLOCK ----------------------------------
 # This file is part of multiToc, a plugin for Dotclear.
 # 
-# Copyright (c) 2009-2015 Tomtom and contributors
+# Copyright (c) 2009-2016 Tomtom and contributors
 # 
 # Licensed under the GPL version 2.0 license.
 # A copy of this license is available in LICENSE file or at
@@ -38,23 +38,28 @@ dl#multitoc ul {
 	padding: 5px;
 	background:transparent;
 }
+dl#multitoc .post-tags-item {
+  display: inline;
+  background: transparent url(index.php?pf=multiToc/img/tag.png) no-repeat left 50%;
+	padding-left: 18px;
+}
 span.toc-item-date {
-	background: transparent url(index.php?pf=multiToc/img/date.png) no-repeat left top;
+	background: transparent url(index.php?pf=multiToc/img/date.png) no-repeat left 50%;
 	padding-left: 18px;
 	color: #666;
 }
 span.toc-item-author {
-	background: transparent url(index.php?pf=multiToc/img/author.png) no-repeat left top;
+	background: transparent url(index.php?pf=multiToc/img/author.png) no-repeat left 50%;
 	padding-left: 18px;
 	color: #666;
 }
 span.toc-item-com {
-	background: transparent url(index.php?pf=multiToc/img/com.png) no-repeat left top;
+	background: transparent url(index.php?pf=multiToc/img/com.png) no-repeat left 50%;
 	padding-left: 18px;
 	color: #666;
 }
 span.toc-item-tb {
-	background: transparent url(index.php?pf=multiToc/img/tb.png) no-repeat left top;
+	background: transparent url(index.php?pf=multiToc/img/tb.png) no-repeat left 50%;
 	padding-left: 18px;
 	color: #666;
 }
