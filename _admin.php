@@ -36,6 +36,7 @@ dcCore::app()->addBehavior('adminDashboardFavoritesV2', function ($favs) {
         'small-icon'  => dcPage::getPF(basename(__DIR__) . '/icon.png'),
         'large-icon'  => dcPage::getPF(basename(__DIR__) . '/icon-big.png'),
         'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_USAGE,
             dcAuth::PERMISSION_CONTENT_ADMIN,
         ]),
     ]);
