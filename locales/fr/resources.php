@@ -1,14 +1,12 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-# This file is part of multiToc, a plugin for Dotclear.
-#
-# Copyright (c) 2009-2015 Tomtom and contributors
-#
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-# -- END LICENSE BLOCK ------------------------------------
-if (!isset($__resources['help']['multiToc']))
-{
-$__resources['help']['multiToc'] = dirname(__FILE__).'/help/multiToc.html';
-}
+/**
+ * @brief multiToc, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Tomtom, Kozlika, Franck Paul, Pierre Van Glabeke and contributors
+ *
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+ dcCore::app()->resources['help']['multiToc'] = __DIR__ . '/help/multiToc.html';
