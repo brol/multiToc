@@ -11,7 +11,7 @@
 
 if (!defined('DC_RC_PATH')) { return; }
 
-$core->addBehavior('initWidgets',array('multiTocWidgets','initWidgets'));
+dcCore::app()->addBehavior('initWidgets',array('multiTocWidgets','initWidgets'));
 
 class multiTocWidgets
 {
@@ -35,33 +35,31 @@ class multiTocWidgets
 	
 	public static function widget($w)
 	{
-		global $core;
 		
 		if ($w->offline)
 		return;
 
-		if (($w->homeonly == 1 && $core->url->type != 'default') ||
-			($w->homeonly == 2 && $core->url->type == 'default')) {
-			return;
-		}
+        if (!$w->checkHomeOnly(dcCore::app()->url->type)) {
+            return null;
+        }
 		
 		$amask = '<a href="%1$s">%2$s</a>';
 		$limask = '<li class="%1$s">%2$s</li>';
 		
 		$res = '';
 		
-		$settings = unserialize($core->blog->settings->multiToc->multitoc_settings);
+		$settings = unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
 		
 		if ($settings['cat']['enable']) {
-			$link = sprintf($amask,$core->blog->url.$core->url->getBase('multitoc').'/cat',__('By category'));
+			$link = sprintf($amask,dcCore::app()->blog->url.dcCore::app()->url->getBase('multitoc').'/cat',__('By category'));
 			$res .= sprintf($limask,'toc-cat',$link);
 		}
 		if ($settings['tag']['enable']) {
-			$link = sprintf($amask,$core->blog->url.$core->url->getBase('multitoc').'/tag',__('By tag'));
+			$link = sprintf($amask,dcCore::app()->blog->url.dcCore::app()->url->getBase('multitoc').'/tag',__('By tag'));
 			$res .= sprintf($limask,'toc-tag',$link);
 		}
 		if ($settings['alpha']['enable']) {
-			$link = sprintf($amask,$core->blog->url.$core->url->getBase('multitoc').'/alpha',__('By alpha order'));
+			$link = sprintf($amask,dcCore::app()->blog->url.dcCore::app()->url->getBase('multitoc').'/alpha',__('By alpha order'));
 			$res .= sprintf($limask,'toc-alpha',$link);
 		}
 		

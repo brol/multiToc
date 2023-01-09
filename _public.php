@@ -11,32 +11,31 @@
 
 if (!defined('DC_RC_PATH')) { return; }
 
-$core->tpl->addValue('MultiTocUrl', array('multiTocTpl','multiTocUrl'));
-$core->tpl->addValue('MultiTocCss', array('multiTocTpl','multiTocCss'));
-$core->tpl->addValue('MultiTocGroupTitle', array('multiTocTpl','multiTocGroupTitle'));
-$core->tpl->addValue('MultiTocGroupDesc', array('multiTocTpl','multiTocGroupDesc'));
-$core->tpl->addValue('MultiTocGroupCount', array('multiTocTpl','multiTocGroupCount'));
-$core->tpl->addValue('MultiTocItemUrl', array('multiTocTpl','multiTocItemUrl'));
-$core->tpl->addValue('MultiTocItemTitle', array('multiTocTpl','multiTocItemTitle'));
-$core->tpl->addValue('MultiTocItemDate', array('multiTocTpl','multiTocItemDate'));
-$core->tpl->addValue('MultiTocItemCategory', array('multiTocTpl','multiTocItemCategory'));
-$core->tpl->addValue('MultiTocItemAuthor', array('multiTocTpl','multiTocItemAuthor'));
-$core->tpl->addValue('MultiTocItemNbComments', array('multiTocTpl','multiTocItemNbComments'));
-$core->tpl->addValue('MultiTocItemNbTrackbacks', array('multiTocTpl','multiTocItemNbTrackbacks'));
-$core->tpl->addValue('MultiTocPageTitle', array('multiTocTpl','multiTocPageTitle'));
+dcCore::app()->tpl->addValue('MultiTocUrl', array('multiTocTpl','multiTocUrl'));
+dcCore::app()->tpl->addValue('MultiTocCss', array('multiTocTpl','multiTocCss'));
+dcCore::app()->tpl->addValue('MultiTocGroupTitle', array('multiTocTpl','multiTocGroupTitle'));
+dcCore::app()->tpl->addValue('MultiTocGroupDesc', array('multiTocTpl','multiTocGroupDesc'));
+dcCore::app()->tpl->addValue('MultiTocGroupCount', array('multiTocTpl','multiTocGroupCount'));
+dcCore::app()->tpl->addValue('MultiTocItemUrl', array('multiTocTpl','multiTocItemUrl'));
+dcCore::app()->tpl->addValue('MultiTocItemTitle', array('multiTocTpl','multiTocItemTitle'));
+dcCore::app()->tpl->addValue('MultiTocItemDate', array('multiTocTpl','multiTocItemDate'));
+dcCore::app()->tpl->addValue('MultiTocItemCategory', array('multiTocTpl','multiTocItemCategory'));
+dcCore::app()->tpl->addValue('MultiTocItemAuthor', array('multiTocTpl','multiTocItemAuthor'));
+dcCore::app()->tpl->addValue('MultiTocItemNbComments', array('multiTocTpl','multiTocItemNbComments'));
+dcCore::app()->tpl->addValue('MultiTocItemNbTrackbacks', array('multiTocTpl','multiTocItemNbTrackbacks'));
+dcCore::app()->tpl->addValue('MultiTocPageTitle', array('multiTocTpl','multiTocPageTitle'));
 
-$core->tpl->addBlock('MultiTocGroup', array('multiTocTpl','multiTocGroup'));
-$core->tpl->addBlock('MultiTocItem', array('multiTocTpl','multiTocItem'));
-$core->tpl->addBlock('MultiTocIf',array('multiTocTpl','multiTocIf'));
-$core->tpl->addBlock('MultiTocMetaData',array('multiTocTpl','multiTocMetaData'));
+dcCore::app()->tpl->addBlock('MultiTocGroup', array('multiTocTpl','multiTocGroup'));
+dcCore::app()->tpl->addBlock('MultiTocItem', array('multiTocTpl','multiTocItem'));
+dcCore::app()->tpl->addBlock('MultiTocIf',array('multiTocTpl','multiTocIf'));
+dcCore::app()->tpl->addBlock('MultiTocMetaData',array('multiTocTpl','multiTocMetaData'));
 
 class multiTocUrl extends dcUrlHandlers
 {
 	public static function multiToc($args)
 	{
-		global $core,$_ctx;
 		
-		$settings = unserialize($core->blog->settings->multiToc->multitoc_settings);
+		$settings = unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
 		
 		if ($settings['cat']['enable']) {
 			$types[] = 'cat';
@@ -59,7 +58,7 @@ class multiTocUrl extends dcUrlHandlers
 			$type = null;
 		}
 		
-		$_ctx->multitoc_type = $type;
+		dcCore::app()->ctx->multitoc_type = $type;
 		
 		if ($type === null) {
 			self::p404();
@@ -77,31 +76,30 @@ class multiTocTpl
 
 	public static function multiTocUrl($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
-		return '<?php echo '.sprintf($f,'$core->blog->url.$core->url->getBase("multitoc")').'; ?>';
+		$f = dcCore::app()->tpl->getFilters($attr);
+		return '<?php echo '.sprintf($f,'dcCore::app()->blog->url.dcCore::app()->url->getBase("multitoc")').'; ?>';
 	}
 	
 	public static function multiTocCss()
 	{
-		global $core;
 		
 		$plop =
-			$core->blog->themes_path.'/'.
-			$core->blog->settings->system->theme.'/styles/multitoc.css';
+			dcCore::app()->blog->themes_path.'/'.
+			dcCore::app()->blog->settings->system->theme.'/styles/multitoc.css';
 			
-		$tagada = $core->blog->themes_path.'/default/multitoc.css';
+		$tagada = dcCore::app()->blog->themes_path.'/default/multitoc.css';
 		
 		if (file_exists($plop)) {
 			$css =
-				$core->blog->settings->system->themes_url.'/'.
-				$core->blog->settings->system->theme.'/styles/multitoc.css';
+				dcCore::app()->blog->settings->system->themes_url.'/'.
+				dcCore::app()->blog->settings->system->theme.'/styles/multitoc.css';
 		} elseif (file_exists($tagada)) {
 			$css =
-				$core->blog->settings->system->themes_url.'/default/multitoc.css';
+				dcCore::app()->blog->settings->system->themes_url.'/default/multitoc.css';
 		} else {
 			$css =
-				$core->blog->url.
-				(($core->blog->settings->system->url_scan == 'path_info')?'?':'').
+				dcCore::app()->blog->url.
+				((dcCore::app()->blog->settings->system->url_scan == 'path_info')?'?':'').
 				'pf=multiToc/css/multitoc.css';
 		}
 		$res =
@@ -114,26 +112,26 @@ class multiTocTpl
 	
 	public static function multiTocGroup($attr,$content)
 	{
-		$p = "\$_ctx->multitoc_settings = unserialize(\$core->blog->settings->multiToc->multitoc_settings);\n";
+		$p = "\dcCore::app()->ctx->multitoc_settings = unserialize(\dcCore::app()->blog->settings->multiToc->multitoc_settings);\n";
 		$p .= "\$params = array();\n";
-		$p .= "if (\$_ctx->multitoc_type == 'cat') :\n";
-			$p .= "\$_ctx->multitoc_group = \$core->blog->getCategories(array('post_type'=>'post'));\n";
-		$p .= "elseif (\$_ctx->multitoc_type == 'tag') :\n";
-			$p .= "\$meta = new dcMeta(\$core);\n";
+		$p .= "if (\dcCore::app()->ctx->multitoc_type == 'cat') :\n";
+			$p .= "\dcCore::app()->ctx->multitoc_group = \dcCore::app()->blog->getCategories(array('post_type'=>'post'));\n";
+		$p .= "elseif (\dcCore::app()->ctx->multitoc_type == 'tag') :\n";
+			$p .= "\$meta = new dcMeta(\dcCore::app());\n";
 			$p .= "\$meta_rs = \$meta->getMetadata(array('meta_type' => 'tag'));\n";
-			$p .= "\$_ctx->multitoc_group = \$meta->computeMetaStats(\$meta_rs);\n";
-			$p .= "\$_ctx->multitoc_group->sort('meta_id_lower',\$_ctx->multitoc_settings['tag']['order_group']);\n";
-		$p .= "elseif (\$_ctx->multitoc_type == 'alpha') :\n";
-			$p .= "if (\$core->con->driver() == 'pgsql') :\n";
-				$p .= "\$_ctx->multitoc_group = ".
-				"multiTocPublic::multiTocGroupPGSQL(\$core,".
-				"\$_ctx->multitoc_settings['alpha']['order_group']);\n";
+			$p .= "\dcCore::app()->ctx->multitoc_group = \$meta->computeMetaStats(\$meta_rs);\n";
+			$p .= "\dcCore::app()->ctx->multitoc_group->sort('meta_id_lower',\dcCore::app()->ctx->multitoc_settings['tag']['order_group']);\n";
+		$p .= "elseif (\dcCore::app()->ctx->multitoc_type == 'alpha') :\n";
+			$p .= "if (\dcCore::app()->con->driver() == 'pgsql') :\n";
+				$p .= "\dcCore::app()->ctx->multitoc_group = ".
+				"multiTocPublic::multiTocGroupPGSQL(\dcCore::app(),".
+				"\dcCore::app()->ctx->multitoc_settings['alpha']['order_group']);\n";
 			$p .= "else :\n";
 				$p .= "\$params['columns'] = array('UPPER(SUBSTRING(post_title,1,1)) AS post_letter','COUNT(*) as count');\n";
 				$p .= "\$params['sql'] = 'GROUP BY post_letter';\n";
 				$p .= "\$params['no_content'] = true;\n";
-				$p .= "\$params['order'] = \$_ctx->multitoc_settings['alpha']['order_group'];\n";
-				$p .= "\$_ctx->multitoc_group = \$core->blog->getPosts(\$params);\n";
+				$p .= "\$params['order'] = \dcCore::app()->ctx->multitoc_settings['alpha']['order_group'];\n";
+				$p .= "\dcCore::app()->ctx->multitoc_group = \dcCore::app()->blog->getPosts(\$params);\n";
 			$p .= "endif;\n";
 		$p .= "endif;\n";
 		
@@ -143,21 +141,21 @@ class multiTocTpl
 		$res .= "?>\n";
 		
 		$res .=
-		'<?php while ($_ctx->multitoc_group->fetch()) : ?>'.$content.'<?php endwhile; $_ctx->multitoc_group = null; $_ctx->multitoc_settings = null; ?>';
+		'<?php while (dcCore::app()->ctx->multitoc_group->fetch()) : ?>'.$content.'<?php endwhile; dcCore::app()->ctx->multitoc_group = null; dcCore::app()->ctx->multitoc_settings = null; ?>';
 		
 		return $res;
 	}
 	
 	public static function multiTocGroupTitle($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
-		$res = "<?php if (\$_ctx->multitoc_type == 'cat') :\n";
-			$res .= "echo ".sprintf($f,'$_ctx->multitoc_group->cat_title').";\n";
-		$res .= "elseif (\$_ctx->multitoc_type == 'tag') :\n";
-			$res .= "echo ".sprintf($f,'$_ctx->multitoc_group->meta_id').";\n";
-		$res .= "elseif (\$_ctx->multitoc_type == 'alpha') :\n";
-			$res .= "echo ".sprintf($f,'$_ctx->multitoc_group->post_letter').";\n";
+		$res = "<?php if (\dcCore::app()->ctx->multitoc_type == 'cat') :\n";
+			$res .= "echo ".sprintf($f,'dcCore::app()->ctx->multitoc_group->cat_title').";\n";
+		$res .= "elseif (\dcCore::app()->ctx->multitoc_type == 'tag') :\n";
+			$res .= "echo ".sprintf($f,'dcCore::app()->ctx->multitoc_group->meta_id').";\n";
+		$res .= "elseif (\dcCore::app()->ctx->multitoc_type == 'alpha') :\n";
+			$res .= "echo ".sprintf($f,'dcCore::app()->ctx->multitoc_group->post_letter').";\n";
 		$res .= "endif; ?>\n";
 		
 		return $res;
@@ -165,10 +163,10 @@ class multiTocTpl
 	
 	public static function multiTocGroupDesc($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
-		$res = "<?php if (\$_ctx->multitoc_type == 'cat') :\n";
-			$res .= "echo ".sprintf($f,'$_ctx->multitoc_group->cat_desc').";\n";
+		$res = "<?php if (\dcCore::app()->ctx->multitoc_type == 'cat') :\n";
+			$res .= "echo ".sprintf($f,'dcCore::app()->ctx->multitoc_group->cat_desc').";\n";
 		$res .= "endif; ?>\n";
 		
 		return $res;
@@ -176,16 +174,16 @@ class multiTocTpl
 	
 	public static function multiTocGroupCount($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
 		$res = "<?php\n";
 		$res .= "\$mask = '<span class=\"toc-group-count\">%s</span>';\n";
-		$res .= "if (\$_ctx->multitoc_type == 'cat' && \$_ctx->multitoc_settings['cat']['display_nb_entry']) :\n";
-			$res .= "echo sprintf(\$mask,'('.".sprintf($f,'$_ctx->multitoc_group->nb_post').".')');\n";
-		$res .= "elseif (\$_ctx->multitoc_type == 'tag' && \$_ctx->multitoc_settings['tag']['display_nb_entry']) :\n";
-			$res .= "echo sprintf(\$mask,'('.".sprintf($f,'$_ctx->multitoc_group->count').".')');\n";
-		$res .= "elseif (\$_ctx->multitoc_type == 'alpha' && \$_ctx->multitoc_settings['alpha']['display_nb_entry']) :\n";
-			$res .= "echo sprintf(\$mask,'('.".sprintf($f,'$_ctx->multitoc_group->count').".')');\n";
+		$res .= "if (\dcCore::app()->ctx->multitoc_type == 'cat' && \dcCore::app()->ctx->multitoc_settings['cat']['display_nb_entry']) :\n";
+			$res .= "echo sprintf(\$mask,'('.".sprintf($f,'dcCore::app()->ctx->multitoc_group->nb_post').".')');\n";
+		$res .= "elseif (\dcCore::app()->ctx->multitoc_type == 'tag' && \dcCore::app()->ctx->multitoc_settings['tag']['display_nb_entry']) :\n";
+			$res .= "echo sprintf(\$mask,'('.".sprintf($f,'dcCore::app()->ctx->multitoc_group->count').".')');\n";
+		$res .= "elseif (\dcCore::app()->ctx->multitoc_type == 'alpha' && \dcCore::app()->ctx->multitoc_settings['alpha']['display_nb_entry']) :\n";
+			$res .= "echo sprintf(\$mask,'('.".sprintf($f,'dcCore::app()->ctx->multitoc_group->count').".')');\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
 		
@@ -198,20 +196,20 @@ class multiTocTpl
 		$p = "\$params = array();\n";
 		$p .= "\$params['no_content'] = true;\n";
 		
-		$p .= "if (\$_ctx->multitoc_type == 'cat') :\n";
-			$p .= "\$params['order'] = \$_ctx->multitoc_settings['cat']['order_entry'];\n";
-			$p .= "\$params['cat_id'] = \$_ctx->multitoc_group->cat_id;\n";
-			$p .= "\$_ctx->multitoc_items = \$core->blog->getPosts(\$params);\n";
-		$p .= "elseif (\$_ctx->multitoc_type == 'tag') :\n";
-			$p .= "\$params['meta_id'] = \$_ctx->multitoc_group->meta_id;\n";
+		$p .= "if (\dcCore::app()->ctx->multitoc_type == 'cat') :\n";
+			$p .= "\$params['order'] = \dcCore::app()->ctx->multitoc_settings['cat']['order_entry'];\n";
+			$p .= "\$params['cat_id'] = \dcCore::app()->ctx->multitoc_group->cat_id;\n";
+			$p .= "\dcCore::app()->ctx->multitoc_items = \dcCore::app()->blog->getPosts(\$params);\n";
+		$p .= "elseif (\dcCore::app()->ctx->multitoc_type == 'tag') :\n";
+			$p .= "\$params['meta_id'] = \dcCore::app()->ctx->multitoc_group->meta_id;\n";
 			$p .= "\$params['meta_type'] = 'tag';\n";
 			$p .= "\$params['post_type'] = '';\n";
-			$p .= "\$params['order'] = \$_ctx->multitoc_settings['tag']['order_entry'];\n";
-			$p .= "\$_ctx->multitoc_items = \$meta->getPostsByMeta(\$params);\n";
-		$p .= "elseif (\$_ctx->multitoc_type == 'alpha') :\n";
-			$p .= "\$params['order'] = \$_ctx->multitoc_settings['alpha']['order_entry'];\n";
-			$p .= "\$params['sql'] = ' AND UPPER(SUBSTRING(post_title,1,1)) = \''.\$_ctx->multitoc_group->post_letter.'\'';\n";
-			$p .= "\$_ctx->multitoc_items = \$core->blog->getPosts(\$params);\n";
+			$p .= "\$params['order'] = \dcCore::app()->ctx->multitoc_settings['tag']['order_entry'];\n";
+			$p .= "\dcCore::app()->ctx->multitoc_items = \$meta->getPostsByMeta(\$params);\n";
+		$p .= "elseif (\dcCore::app()->ctx->multitoc_type == 'alpha') :\n";
+			$p .= "\$params['order'] = \dcCore::app()->ctx->multitoc_settings['alpha']['order_entry'];\n";
+			$p .= "\$params['sql'] = ' AND UPPER(SUBSTRING(post_title,1,1)) = \''.\dcCore::app()->ctx->multitoc_group->post_letter.'\'';\n";
+			$p .= "\dcCore::app()->ctx->multitoc_items = \dcCore::app()->blog->getPosts(\$params);\n";
 		$p .= "endif;\n";
 		
 		$res = "<?php\n";
@@ -220,36 +218,36 @@ class multiTocTpl
 		$res .= "?>\n";
 		
 		$res .=
-		'<?php while ($_ctx->multitoc_items->fetch()) : ?>'.$content.'<?php endwhile; $_ctx->multitoc_items = null; ?>';
+		'<?php while (dcCore::app()->ctx->multitoc_items->fetch()) : ?>'.$content.'<?php endwhile; dcCore::app()->ctx->multitoc_items = null; ?>';
 		
 		return $res;
 	}
 	
 	public static function multiTocItemUrl($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
-		return '<?php echo '.sprintf($f,'$_ctx->multitoc_items->getURL()').'; ?>';
+		$f = dcCore::app()->tpl->getFilters($attr);
+		return '<?php echo '.sprintf($f,'dcCore::app()->ctx->multitoc_items->getURL()').'; ?>';
 	}
 	
 	public static function multiTocItemTitle($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
-		return '<?php echo '.sprintf($f,'$_ctx->multitoc_items->post_title').'; ?>';
+		$f = dcCore::app()->tpl->getFilters($attr);
+		return '<?php echo '.sprintf($f,'dcCore::app()->ctx->multitoc_items->post_title').'; ?>';
 	}
 	
 	public static function multiTocItemDate($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
 		$mask = isset($attr['mask']) ? sprintf($f,'"'.$attr['mask'].'"') : '\'<span class="toc-item-date">%s</span> - \'';
 		
 		$res = "<?php\n";
 		$res .= "\$mask = ".$mask.";\n";
-		$res .= "if ((\$_ctx->multitoc_type == 'cat' && \$_ctx->multitoc_settings['cat']['display_date'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'tag' && \$_ctx->multitoc_settings['tag']['display_date'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'alpha' && \$_ctx->multitoc_settings['alpha']['display_date'])\n";
+		$res .= "if ((\dcCore::app()->ctx->multitoc_type == 'cat' && \dcCore::app()->ctx->multitoc_settings['cat']['display_date'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'tag' && \dcCore::app()->ctx->multitoc_settings['tag']['display_date'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'alpha' && \dcCore::app()->ctx->multitoc_settings['alpha']['display_date'])\n";
 		$res .= ") :\n";
-			$res .= "echo sprintf(\$mask,\$_ctx->multitoc_items->getDate(\$_ctx->multitoc_settings[\$_ctx->multitoc_type]['format_date']));\n";
+			$res .= "echo sprintf(\$mask,\dcCore::app()->ctx->multitoc_items->getDate(\dcCore::app()->ctx->multitoc_settings[\dcCore::app()->ctx->multitoc_type]['format_date']));\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
 		
@@ -258,17 +256,17 @@ class multiTocTpl
 	
 	public static function multiTocItemAuthor($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
 		$mask = isset($attr['mask']) ? sprintf($f,'"'.$attr['mask'].'"') : '\' - <span class="toc-item-author">%s</span>\'';
 		
 		$res = "<?php\n";
 		$res .= "\$mask = ".$mask.";\n";
-		$res .= "if ((\$_ctx->multitoc_type == 'cat' && \$_ctx->multitoc_settings['cat']['display_author'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'tag' && \$_ctx->multitoc_settings['tag']['display_author'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'alpha' && \$_ctx->multitoc_settings['alpha']['display_author'])\n";
+		$res .= "if ((\dcCore::app()->ctx->multitoc_type == 'cat' && \dcCore::app()->ctx->multitoc_settings['cat']['display_author'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'tag' && \dcCore::app()->ctx->multitoc_settings['tag']['display_author'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'alpha' && \dcCore::app()->ctx->multitoc_settings['alpha']['display_author'])\n";
 		$res .= ") :\n";
-			$res .= "echo sprintf(\$mask,\$_ctx->multitoc_items->getAuthorLink());\n";
+			$res .= "echo sprintf(\$mask,\dcCore::app()->ctx->multitoc_items->getAuthorLink());\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
 		
@@ -277,21 +275,21 @@ class multiTocTpl
 
 	public static function multiTocItemCategory($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
 		$mask = isset($attr['mask']) ? sprintf($f,'"'.$attr['mask'].'"') : '\' - <span class="toc-item-cat">%s</span>\'';
 		
 		$res = "<?php\n";
 		$res .= "\$mask = ".$mask.";\n";
-		$res .= "if (((\$_ctx->multitoc_type == 'cat' && \$_ctx->multitoc_settings['cat']['display_cat'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'tag' && \$_ctx->multitoc_settings['tag']['display_cat'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'alpha' && \$_ctx->multitoc_settings['alpha']['display_cat']))\n";
-		$res .= "&& \$_ctx->multitoc_items->cat_title !== null\n";
+		$res .= "if (((\dcCore::app()->ctx->multitoc_type == 'cat' && \dcCore::app()->ctx->multitoc_settings['cat']['display_cat'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'tag' && \dcCore::app()->ctx->multitoc_settings['tag']['display_cat'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'alpha' && \dcCore::app()->ctx->multitoc_settings['alpha']['display_cat']))\n";
+		$res .= "&& \dcCore::app()->ctx->multitoc_items->cat_title !== null\n";
 		$res .= ") :\n";
 			$res .= 
 			"\$link = sprintf('<a href=\"%1\$s\">%2\$s</a>',".
-			sprintf($f,'$core->blog->url.$core->url->getBase("category")."/".$_ctx->multitoc_items->cat_url').",".
-			sprintf($f,'$_ctx->multitoc_items->cat_title').");\n".
+			sprintf($f,'dcCore::app()->blog->url.dcCore::app()->url->getBase("category")."/".dcCore::app()->ctx->multitoc_items->cat_url').",".
+			sprintf($f,'dcCore::app()->ctx->multitoc_items->cat_title').");\n".
 			"echo sprintf(\$mask,\$link);\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
@@ -301,17 +299,17 @@ class multiTocTpl
 
 	public static function multiTocItemNbComments($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
 		$mask = isset($attr['mask']) ? sprintf($f,'"'.$attr['mask'].'"') : '\' - <span class="toc-item-com">%s</span>\'';
 		
 		$res = "<?php\n";
 		$res .= "\$mask = ".$mask.";\n";
-		$res .= "if ((\$_ctx->multitoc_type == 'cat' && \$_ctx->multitoc_settings['cat']['display_nb_com'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'tag' && \$_ctx->multitoc_settings['tag']['display_nb_com'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'alpha' && \$_ctx->multitoc_settings['alpha']['display_nb_com'])\n";
+		$res .= "if ((\dcCore::app()->ctx->multitoc_type == 'cat' && \dcCore::app()->ctx->multitoc_settings['cat']['display_nb_com'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'tag' && \dcCore::app()->ctx->multitoc_settings['tag']['display_nb_com'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'alpha' && \dcCore::app()->ctx->multitoc_settings['alpha']['display_nb_com'])\n";
 		$res .= ") :\n";
-			$res .= "echo sprintf(\$mask,\$_ctx->multitoc_items->nb_comment);\n";
+			$res .= "echo sprintf(\$mask,\dcCore::app()->ctx->multitoc_items->nb_comment);\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
 		
@@ -320,17 +318,17 @@ class multiTocTpl
 
 	public static function multiTocItemNbTrackbacks($attr)
 	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+		$f = dcCore::app()->tpl->getFilters($attr);
 		
 		$mask = isset($attr['mask']) ? sprintf($f,'"'.$attr['mask'].'"') : '\' - <span class="toc-item-tb">%s</span>\'';
 		
 		$res = "<?php\n";
 		$res .= "\$mask = ".$mask.";\n";
-		$res .= "if ((\$_ctx->multitoc_type == 'cat' && \$_ctx->multitoc_settings['cat']['display_nb_tb'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'tag' && \$_ctx->multitoc_settings['tag']['display_nb_tb'])\n";
-		$res .= "|| (\$_ctx->multitoc_type == 'alpha' && \$_ctx->multitoc_settings['alpha']['display_nb_tb'])\n";
+		$res .= "if ((\dcCore::app()->ctx->multitoc_type == 'cat' && \dcCore::app()->ctx->multitoc_settings['cat']['display_nb_tb'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'tag' && \dcCore::app()->ctx->multitoc_settings['tag']['display_nb_tb'])\n";
+		$res .= "|| (\dcCore::app()->ctx->multitoc_type == 'alpha' && \dcCore::app()->ctx->multitoc_settings['alpha']['display_nb_tb'])\n";
 		$res .= ") :\n";
-			$res .= "echo sprintf(\$mask,\$_ctx->multitoc_items->nb_trackback);\n";
+			$res .= "echo sprintf(\$mask,\dcCore::app()->ctx->multitoc_items->nb_trackback);\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
 		
@@ -342,11 +340,11 @@ class multiTocTpl
 		$res = "<?php\n";
 		$res .= "echo __('Table of content');\n";
 		
-		$res .= "if (\$_ctx->multitoc_type == 'cat') :\n";
+		$res .= "if (\dcCore::app()->ctx->multitoc_type == 'cat') :\n";
 			$res .= "echo ' - '.__('By category');\n";
-		$res .= "elseif (\$_ctx->multitoc_type == 'tag') :\n";
+		$res .= "elseif (\dcCore::app()->ctx->multitoc_type == 'tag') :\n";
 			$res .= "echo ' - '.__('By tag');\n";
-		$res .= "elseif (\$_ctx->multitoc_type == 'alpha') :\n";
+		$res .= "elseif (\dcCore::app()->ctx->multitoc_type == 'alpha') :\n";
 			$res .= "echo ' - '.__('By alpha order');\n";
 		$res .= "endif;\n";
 		$res .= "?>\n";
@@ -361,7 +359,7 @@ class multiTocTpl
 		$operator = isset($attr['operator']) ? $this->getOperator($attr['operator']) : '&&';
 		
 		if (isset($attr['type'])) {
-			$if[] = "\$_ctx->multitoc_type == '".addslashes($attr['type'])."'";
+			$if[] = "\dcCore::app()->ctx->multitoc_type == '".addslashes($attr['type'])."'";
 		}
 		
 		if (!empty($if)) {
@@ -387,15 +385,15 @@ class multiTocTpl
 		
 		$res =
 		"<?php\n".
-		'$objMeta = new dcMeta($core); '.
-		"\$_ctx->meta = \$objMeta->getMetaRecordset(\$_ctx->multitoc_items->post_meta,'".$type."'); ".
-		"\$_ctx->meta->sort('".$sortby."','".$order."'); ".
+		'$objMeta = new dcMeta(dcCore::app()); '.
+		"\dcCore::app()->ctx->meta = \$objMeta->getMetaRecordset(\dcCore::app()->ctx->multitoc_items->post_meta,'".$type."'); ".
+		"\dcCore::app()->ctx->meta->sort('".$sortby."','".$order."'); ".
 		'?>';
 		
-		$res .= "<?php if (\$_ctx->multitoc_settings[\$_ctx->multitoc_type]['display_tag']) : ?>\n";
+		$res .= "<?php if (\dcCore::app()->ctx->multitoc_settings[\dcCore::app()->ctx->multitoc_type]['display_tag']) : ?>\n";
 		$res .= 
-		'<?php while ($_ctx->meta->fetch()) : ?>'.$content.'<?php endwhile; '.
-		'$_ctx->meta = null; unset($objMeta); ?>';
+		'<?php while (dcCore::app()->ctx->meta->fetch()) : ?>'.$content.'<?php endwhile; '.
+		'dcCore::app()->ctx->meta = null; unset($objMeta); ?>';
 		$res .= "<?php endif; ?>\n";
 		
 		return $res;
@@ -404,7 +402,7 @@ class multiTocTpl
 
 class multiTocPublic
 {
-	public static function multiTocGroupPGSQL($core,$order_group)
+	public static function multiTocGroupPGSQL($order_group)
 	{
 		$params = array();
 		$params['columns'] = array(
@@ -413,7 +411,7 @@ class multiTocPublic
 		$params['no_content'] = true;
 		$params['order'] = $order_group;
 		
-		$rs = $core->blog->getPosts($params);
+		$rs = dcCore::app()->blog->getPosts($params);
 		
 		$array = array();
 		
@@ -464,7 +462,7 @@ class multiTocPublic
 	}
 }
 
-$core->addBehavior('publicBreadcrumb',array('extMultiToc','publicBreadcrumb'));
+dcCore::app()->addBehavior('publicBreadcrumb',array('extMultiToc','publicBreadcrumb'));
 
 class extMultiToc
 {

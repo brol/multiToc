@@ -13,11 +13,9 @@ if (!defined('DC_CONTEXT_ADMIN')) { return; }
 
 $page_title = __('Tables of content');
 
-$p_url	= 'plugin.php?p=multiToc';
-
 if (!empty($_POST['save']))
 {
-	$settings	= unserialize($core->blog->settings->multiToc->multitoc_settings);
+	$settings	= unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
 	
 	$types = array('cat','tag','alpha','post');
 	
@@ -33,8 +31,8 @@ if (!empty($_POST['save']))
 		}
 	}
 	
-	$core->blog->settings->multiToc->put('multitoc_settings',serialize($settings));
-	http::redirect($p_url.'&upd=1');
+	dcCore::app()->blog->settings->multiToc->put('multitoc_settings',serialize($settings));
+	http::redirect(dcCore::app()->admin->getPageURL().'&upd=1');
 }
 
 echo
@@ -45,7 +43,7 @@ echo
 '<body>'.
 	dcPage::breadcrumb(
     array(
-    html::escapeHTML($core->blog->name) => '',
+    html::escapeHTML(dcCore::app()->blog->name) => '',
     '<span class="page-title">'.$page_title.'</span>' => ''
     ));
 
@@ -55,12 +53,12 @@ if (!empty($_GET['upd'])) {
 }
 
 echo
-'<form method="post" action="'.$p_url.'">'.
+'<form method="post" action="'.dcCore::app()->admin->getPageURL().'">'.
 	multiTocUi::form('post').
 	multiTocUi::form('cat').
 	multiTocUi::form('tag').
 	multiTocUi::form('alpha').
-	$core->formNonce().
+	dcCore::app()->formNonce().
 '<p><input name="save" value="'.__('Save').'" type="submit" /></p>'.
 '</form>'.
  dcPage::helpBlock('multiToc').

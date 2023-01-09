@@ -11,27 +11,32 @@
 
 if (!defined('DC_CONTEXT_ADMIN')) { return; }
 
-$core->addBehavior('adminPostHeaders',array('multiTocBehaviors','postHeaders'));
-$core->addBehavior('adminPageHeaders',array('multiTocBehaviors','postHeaders'));
+dcCore::app()->addBehavior('adminPostHeaders',array('multiTocBehaviors','postHeaders'));
+dcCore::app()->addBehavior('adminPageHeaders',array('multiTocBehaviors','postHeaders'));
 
-$_menu['Blog']->addItem(
-	__('Tables of content'),
-	'plugin.php?p=multiToc',
-	'index.php?pf=multiToc/icon.png',
-	preg_match('/plugin.php\?p=multiToc(&.*)?$/',
-	$_SERVER['REQUEST_URI']),
-	$core->auth->check('admin',$core->blog->id)
+// Admin sidebar menu
+dcCore::app()->menu[dcAdmin::MENU_BLOG]->addItem(
+    __('Tables of content'),
+    dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+    dcPage::getPF(basename(__DIR__) . '/icon.png'),
+    preg_match(
+        '/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))) . '(&.*)?$/',
+        $_SERVER['REQUEST_URI']
+    ),
+    dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
+        dcAuth::PERMISSION_CONTENT_ADMIN,
+    ]), dcCore::app()->blog->id)
 );
 
-$core->addBehavior('adminDashboardFavorites','multiTocDashboardFavorites');
-
-function multiTocDashboardFavorites($core,$favs)
-{
-	$favs->register('multiToc', array(
-		'title' => __('Tables of content'),
-		'url' => 'plugin.php?p=multiToc',
-		'small-icon' => 'index.php?pf=multiToc/icon.png',
-		'large-icon' => 'index.php?pf=multiToc/icon-big.png',
-		'permissions' => 'usage,contentadmin'
-	));
-}
+// Admin dashbaord favorite
+dcCore::app()->addBehavior('adminDashboardFavoritesV2', function ($favs) {
+    $favs->register(basename(__DIR__), [
+        'title'       => __('Tables of content'),
+        'url'         => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__)),
+        'small-icon'  => dcPage::getPF(basename(__DIR__) . '/icon.png'),
+        'large-icon'  => dcPage::getPF(basename(__DIR__) . '/icon-big.png'),
+        'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_CONTENT_ADMIN,
+        ]),
+    ]);
+});

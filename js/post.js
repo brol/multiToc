@@ -14,11 +14,11 @@ jsToolBar.prototype.elements.multiToc = {
 	title: 'Table of content',
 	icon: 'index.php?pf=multiToc/img/bt_multitoc.png',
 	fn: {
-		wiki: function() { this.encloseSelection("\n\n::TOC::\n\n",''); },
-		xhtml: function() { this.encloseSelection("\n<p>::TOC::</p>\n",''); },
+		wiki: function() { this.encloseSelection("\n\n;;TOC;;\n\n",''); },
+		xhtml: function() { this.encloseSelection("\n<p>;;TOC;;</p>\n",''); },
 		wysiwyg: function() {
 			var c = this.applyHtmlFilters(this.ibody.innerHTML);
-			var s = '<p>::TOC::</p>';
+			var s = '<p>;;TOC;;</p>';
 			this.ibody.innerHTML = c + s;
 		}
 	}

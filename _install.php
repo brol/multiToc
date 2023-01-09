@@ -11,8 +11,8 @@
 
 if (!defined('DC_CONTEXT_ADMIN')) { return; }
 
-$m_version = $core->plugins->moduleInfo('multiToc','version');
-$i_version = $core->getVersion('multiToc');
+$m_version = dcCore::app()->plugins->moduleInfo('multiToc','version');
+$i_version = dcCore::app()->getVersion('multiToc');
 if (version_compare($i_version,$m_version,'>=')) {
 	return;
 }
@@ -25,7 +25,7 @@ $settings = array(
 		'display_nb_entry' => '',
 		'order_entry' => '',
 		'display_date' => '',
-		'format_date' => $core->blog->settings->system->date_format,
+		'format_date' => dcCore::app()->blog->settings->system->date_format,
 		'display_author' => '',
 		'display_cat' => '',
 		'display_nb_com' => '',
@@ -38,7 +38,7 @@ $settings = array(
 		'display_nb_entry' => '',
 		'order_entry' => '',
 		'display_date' => '',
-		'format_date' => $core->blog->settings->system->date_format,
+		'format_date' => dcCore::app()->blog->settings->system->date_format,
 		'display_author' => '',
 		'display_cat' => '',
 		'display_nb_com' => '',
@@ -51,7 +51,7 @@ $settings = array(
 		'display_nb_entry' => '',
 		'order_entry' => '',
 		'display_date' => '',
-		'format_date' => $core->blog->settings->system->date_format,
+		'format_date' => dcCore::app()->blog->settings->system->date_format,
 		'display_author' => '',
 		'display_cat' => '',
 		'display_nb_com' => '',
@@ -63,9 +63,9 @@ $settings = array(
 		'numbering' => ''
 	)
 );
-$core->blog->settings->addNamespace('multiToc');
-$core->blog->settings->multiToc->put('multitoc_settings',serialize($settings),'string','multiToc settings',false,true);
+dcCore::app()->blog->settings->addNamespace('multiToc');
+dcCore::app()->blog->settings->multiToc->put('multitoc_settings',serialize($settings),'string','multiToc settings',false,true);
 
-$core->setVersion('multiToc',$m_version);
+dcCore::app()->setVersion('multiToc',$m_version);
 
 return true;

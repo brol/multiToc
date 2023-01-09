@@ -13,7 +13,7 @@ if (!defined('DC_RC_PATH')) {return;}
 class multiTocPost
 {
 	protected $p_h = '/<h([1-6])>(.*)<\/h\\1>/';
-	protected $p_t = '/<p>::TOC::<\/p>/';
+	protected $p_t = '/<p>;;TOC;;<\/p>/';
 	protected $p_r_a = '<a href="%1$s#%2$s">%3$s</a>';
 	protected $p_r_h = '<h%1$s%2$s>%3$s</h%1$s>';
 	protected $p_r_t = '<div class="post-toc">%s</div>';
@@ -24,7 +24,7 @@ class multiTocPost
 	
 	public function __construct($rs)
 	{
-		$s = unserialize($rs->core->blog->settings->multiToc->multitoc_settings);
+		$s = unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
 		
 		$this->rs = $rs;
 		$this->count = $s['post']['numbering'];
@@ -113,7 +113,7 @@ class multiTocPost
 		}
 	}
 	
-	protected function getToc($tree = null)
+	protected function getToc($tree = null, $toc = true)
 	{
 		$res = array();
 		
@@ -133,12 +133,17 @@ class multiTocPost
 			$link = sprintf('<a href="%1$s">%2$s</a>',$url,$title);
 			
 			if (is_array($child)) {
-				$link .= $this->getToc($child);
+				$link .= $this->getToc($child, false);
 			}
 			array_push($res,sprintf('<li>%s</li>',$link));
 		}
 		
-		return sprintf('<ul>%s</ul>',implode("\n",$res));
+		
+		if ($toc) {
+		  return sprintf('<h3>'.__('Tables of content').'</h3><ul>%s</ul>',implode("\n",$res));
+		} else {
+			  return sprintf('<ul>%s</ul>',implode("\n",$res));
+		}
 	}
 	
 	protected function replaceTitles($matches)
@@ -159,9 +164,7 @@ class multiTocPost
 class multiTocUi
 {	
 	public static function form($type = 'cat')
-	{
-		global $core;
-		
+	{		
 		$order_entry_data = array(
 			__('Title up') => 'post_title asc',
 			__('Title down') => 'post_title desc',
@@ -271,10 +274,10 @@ class multiTocUi
 			'<div class="fieldset">'.
 			'<h4>'.$legend.'</h4>'.
       '<p><label for="'.$type.'_enable" class="classic">'.
-			form::checkbox($type.'_enable',1,multiTocUi::getSetting($type,'enable'),null,null,!$core->plugins->moduleExists('stacker')).$enable.
+			form::checkbox($type.'_enable',1,multiTocUi::getSetting($type,'enable'),null,null,!dcCore::app()->plugins->moduleExists('stacker')).$enable.
 			'</label></p>'.
 			'<p><label for="'.$type.'_numbering" class="classic">'.
-			form::checkbox($type.'_numbering',1,multiTocUi::getSetting($type,'numbering'),null,null,!$core->plugins->moduleExists('stacker')).$numbering.
+			form::checkbox($type.'_numbering',1,multiTocUi::getSetting($type,'numbering'),null,null,!dcCore::app()->plugins->moduleExists('stacker')).$numbering.
 			'</label></p>'.
 			'<p class="info">'.__('Those options require stacker plugin').'</p>'.
 			'</div>';
@@ -285,10 +288,8 @@ class multiTocUi
 	}
 	
 	public static function getSetting($type,$value)
-	{
-		global $core;
-		
-		$settings	= unserialize($core->blog->settings->multiToc->multitoc_settings);
+	{		
+		$settings	= unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
 		
 		return isset($settings[$type][$value]) ? $settings[$type][$value] : '';
 	}

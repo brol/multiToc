@@ -10,29 +10,28 @@
 # -- END LICENSE BLOCK ------------------------------------
 if (!defined('DC_RC_PATH')) { return; }
 
-$__autoload['multiTocPost'] = dirname(__FILE__).'/inc/class.multi.toc.php';
-$__autoload['multiTocUi'] = dirname(__FILE__).'/inc/class.multi.toc.php';
+Clearbricks::lib()->autoload(['multiTocPost' => __DIR__ .'/inc/class.multi.toc.php']);
+Clearbricks::lib()->autoload(['multiTocUi' => __DIR__ .'/inc/class.multi.toc.php']);
 
-$core->addBehavior('publicBeforeDocument',array('multiTocBehaviors','addTplPath'));
-$core->addBehavior('coreBlogGetPosts',array('multiTocBehaviors','coreBlogGetPosts'));
-$core->addBehavior('initStacker',array('multiTocBehaviors','initStacker'));
+dcCore::app()->addBehavior('publicBeforeDocument',array('multiTocBehaviors','addTplPath'));
+dcCore::app()->addBehavior('coreBlogGetPosts',array('multiTocBehaviors','coreBlogGetPosts'));
+dcCore::app()->addBehavior('initStacker',array('multiTocBehaviors','initStacker'));
 
-$core->url->register('multitoc','multitoc','^multitoc/(.*)$',array('multiTocUrl','multiToc'));
+dcCore::app()->url->register('multitoc','multitoc','^multitoc/(.*)$',array('multiTocUrl','multiToc'));
 
-require dirname(__FILE__).'/_widgets.php';
+require_once __DIR__ . '/_widgets.php';
 
 class multiTocBehaviors
 {
 	public static function addTplPath()
         
 	{
-		global $core;
 		
-		$tplset = $core->themes->moduleInfo($core->blog->settings->system->theme,'tplset');
+		$tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->system->theme,'tplset');
         if (!empty($tplset) && is_dir(dirname(__FILE__).'/default-templates/'.$tplset)) {
-            $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__).'/default-templates/'.$tplset);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), dirname(__FILE__).'/default-templates/'.$tplset);
         } else {
-            $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__).'/default-templates/'.DC_DEFAULT_TPLSET);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), dirname(__FILE__).'/default-templates/'.DC_DEFAULT_TPLSET);
         }
 	}
 	
@@ -43,21 +42,21 @@ class multiTocBehaviors
 	
 	public static function postHeaders()
 	{
-		$s = unserialize($GLOBALS['core']->blog->settings->multiToc->multitoc_settings);
+		$s = unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
 		
 		return
 			(isset($s['post']['enable']) && $s['post']['enable']) ?
-			'<script type="text/javascript" src="index.php?pf=multiToc/js/post.js"></script>'.
-			'<script type="text/javascript">'."\n".
+			'<script src="index.php?pf=multiToc/js/post.js"></script>'.
+			'<script>'."\n".
 			"//<![CDATA[\n".
 			dcPage::jsVar('jsToolBar.prototype.elements.multiToc.title',__('Table of content')).
 			"\n//]]>\n".
 			"</script>\n" : '';
 	}
 	
-	public static function initStacker($core)
+	public static function initStacker()
 	{
-		$core->stacker->addFilter(
+		dcCore::app()->stacker->addFilter(
 			'multiTocFilter',
 			'multiTocBehaviors',
 			'multiTocFilter',
@@ -84,7 +83,7 @@ class rsMultiTocPost
 {
 	public static function hasToc($rs)
 	{
-		if (preg_match('/<p>::TOC::<\/p>/',$rs->post_excerpt_xhtml.$rs->post_content_xhtml)) {
+		if (preg_match('/<p>;;TOC;;<\/p>/',$rs->post_excerpt_xhtml.$rs->post_content_xhtml)) {
 			return true;
 		}
 		else {
