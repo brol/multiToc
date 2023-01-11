@@ -1,6 +1,6 @@
 # Language: Français
 # Module: multiToc - 2.0-dev
-# Date: 2023-01-09 22:34:59
+# Date: 2023-01-11 11:00:01
 # Author: Pierre Van Glabeke
 # Translated with translater 2022.12.26
 
@@ -9,8 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: multiToc 2.0-dev\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-09T22:34:59+00:00\n"
-"Last-Translator: Pierre Van Glabeke\n"
+"PO-Revision-Date: 2023-01-11T11:00:01+00:00\n"
+"Last-Translator: brol\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,13 +22,13 @@ msgstr ""
 msgid "Tables of content"
 msgstr "Tables des matières"
 
-#: _prepend.php:53
+#: _prepend.php:50
 #: _public.php:343
 #: _widgets.php:23
 msgid "Table of content"
 msgstr "Table des matières"
 
-#: _prepend.php:67
+#: _prepend.php:79
 msgid "Add post TOC"
 msgstr "Ajouter une table des matières à un billet"
 
@@ -55,21 +55,25 @@ msgstr "MultiToc : table des matières"
 msgid "Contents by category, keyword and alphabetical order"
 msgstr "Table des matières par catégorie, mot-clé et ordre alphabétique"
 
+#: default-templates/currywurst/multitoc.html:55
 #: default-templates/dotty/multitoc.html:55
 #: default-templates/mustek/multitoc.html:55
 msgid "Table of content by category"
 msgstr "Table des matières par catégorie"
 
+#: default-templates/currywurst/multitoc.html:58
 #: default-templates/dotty/multitoc.html:58
 #: default-templates/mustek/multitoc.html:58
 msgid "Table of content by alpha list"
 msgstr "Table des matières par ordre alphabétique"
 
+#: default-templates/currywurst/multitoc.html:61
 #: default-templates/dotty/multitoc.html:61
 #: default-templates/mustek/multitoc.html:61
 msgid "Table of content by tag"
 msgstr "Table des matières par mot-clé"
 
+#: default-templates/currywurst/multitoc.html:63
 #: default-templates/dotty/multitoc.html:63
 #: default-templates/mustek/multitoc.html:63
 msgid "Click on each group name to display or hide entries list"
