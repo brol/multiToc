@@ -41,19 +41,31 @@ class multiTocBehaviors
 		$rs->extend('rsMultiTocPost');
 	}
 	
-	public static function postHeaders()
+  public static function adminPostEditor($editor = '')
 	{
+    $res = '';
 		$s = unserialize(dcCore::app()->blog->settings->multiToc->multitoc_settings);
-		
-		return
-			(isset($s['post']['enable']) && $s['post']['enable']) ?
-			'<script src="index.php?pf=multiToc/js/post.js"></script>'.
-			'<script>'."\n".
-			"//<![CDATA[\n".
-			dcPage::jsVar('jsToolBar.prototype.elements.multiToc.title',__('Table of content')).
-			"\n//]]>\n".
-			"</script>\n" : '';
+    if (isset($s['post']['enable']) && $s['post']['enable']) {
+      if ($editor == 'dcLegacyEditor') {
+        $res = dcPage::jsJson('dc_editor_multitoc', ['title' => __('Table of content')]) .
+          dcPage::jsModuleLoad('multiToc/js/post.js', dcCore::app()->getVersion('multiToc'));
+      } elseif ($editor == 'dcCKEditor') {
+        $res = dcPage::jsJson('ck_editor_multitoc', [
+          'title'        => __('Table of content'),
+        ]);
+      }
+    }
+    return $res;
 	}
+
+  public static function ckeditorExtraPlugins(ArrayObject $extraPlugins)
+  {
+    $extraPlugins[] = [
+      'name'   => 'multitoc',
+      'button' => 'multiToc',
+      'url'    => DC_ADMIN_URL . 'index.php?pf=multiToc/js/ckeditor-multitoc-plugin.js',
+    ];
+  }
 	
 	public static function initStacker()
 	{
