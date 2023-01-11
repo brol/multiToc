@@ -57,6 +57,15 @@ class multiTocBehaviors
     }
     return $res;
 	}
+
+  public static function ckeditorExtraPlugins(ArrayObject $extraPlugins)
+  {
+    $extraPlugins[] = [
+      'name'   => 'multitoc',
+      'button' => 'multiToc',
+      'url'    => DC_ADMIN_URL . 'index.php?pf=multiToc/js/ckeditor-multitoc-plugin.js',
+    ];
+  }
 	
 	public static function initStacker()
 	{
