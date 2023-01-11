@@ -11,8 +11,8 @@
  */
 if (!defined('DC_CONTEXT_ADMIN')) { return; }
 
-dcCore::app()->addBehavior('adminPostHeaders',array('multiTocBehaviors','postHeaders'));
-dcCore::app()->addBehavior('adminPageHeaders',array('multiTocBehaviors','postHeaders'));
+dcCore::app()->addBehavior('adminPostEditor', array('multiTocBehaviors', 'adminPostEditor'));
+dcCore::app()->addBehavior('ckeditorExtraPlugins', array('multiTocBehaviors', 'ckeditorExtraPlugins'));
 
 // Admin sidebar menu
 dcCore::app()->menu[dcAdmin::MENU_BLOG]->addItem(
