@@ -68,7 +68,7 @@ class multiTocWidgets
 		($w->title ? $w->renderTitle(html::escapeHTML($w->title)) : '').
 		'<ul>'.$res.'</ul>';
 
-		return $w->renderDiv($w->content_only,'info-blog '.$w->class,'',$res);
+		return $w->renderDiv($w->content_only,'multitoc '.$w->class,'',$res);
 
 		}
 		
